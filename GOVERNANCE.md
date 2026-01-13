@@ -112,20 +112,20 @@ creates a permanent, public design record for the project's evolution.
 The path below should be followed for resolving issues that are technical in
 nature.
 
-*   **L1:** routine changes (bug fixes, documentation, minor improvements) are
+* **L1:** Routine changes (bug fixes, documentation, minor improvements) are
     auto-approved after 1 business day if no blocks are raised (silence =
     consent).
-*   **L2:** For non-major version increments and standard changes, proposals are
+* **L2:** For non-major version increments and standard changes, proposals are
     auto-approved after 5 business days if no objections are raised and there is
     at least one +1 from a maintainer. If objections are raised, contributors
     have 3 business days to reach a resolution.
-*   **L3:** If unresolved after 5 business days, the relevant maintainer makes a
+* **L3:** If unresolved after 5 business days, the relevant maintainer makes a
     binding decision based on technical merit and speed.
-*   **L4:** Any technical issues that span across topics and cannot be resolved
+* **L4:** Any technical issues that span across topics and cannot be resolved
     amongst maintainers and DWGs will be escalated to the TC. Significant
     changes affecting core protocol architecture must follow the Enhancement
     Proposal process, requiring TC approval before implementation.
-*   **L5:** If a conflict impacts the core protocol’s scope or business
+* **L5:** If a conflict impacts the core protocol’s scope or business
     strategy, it escalates to the Governing Council.
 
 The TC reserves the right to stop any discussions deemed non-critical to the
