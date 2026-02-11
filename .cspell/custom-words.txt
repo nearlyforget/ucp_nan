@@ -92,8 +92,6 @@ renderable
 repudiable
 schemas
 sdjwt
-shellcheck
-codespell
 shopify
 streamable
 superfences
