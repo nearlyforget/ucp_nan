@@ -52,7 +52,7 @@ If an incomplete checkout already exists for the given `cart_id`, the business M
 When checkout is initialized via `cart_id`, the cart and checkout sessions SHOULD be linked for the duration of the checkout.
 
 - **During active checkout** — Business SHOULD maintain the cart and reflect relevant checkout modifications (quantity changes, item removals) back to the cart. This supports back-to-storefront flows when buyers transition between checkout and storefront.
-- **After checkout completion** — Business MAY clear the cart based on TTL, completion of the checkout, or other business logic. Subsequent operations on a cleared cart ID return `NOT_FOUND`; the platform can start a new session with `create_cart`.
+- **After checkout completion** — Business MAY clear the cart based on TTL, completion of the checkout, or other business logic. Subsequent operations on a cleared cart ID return `not_found`; the platform can start a new session with `create_cart`.
 
 ## Guidelines
 
@@ -61,7 +61,7 @@ When checkout is initialized via `cart_id`, the cart and checkout sessions SHOUL
 - **MAY** use carts for pre-purchase exploration and session persistence.
 - **SHOULD** convert cart to checkout when user expresses purchase intent.
 - **MAY** display `continue_url` for handoff to business UI.
-- **SHOULD** handle `NOT_FOUND` gracefully when cart expires or is canceled.
+- **SHOULD** handle `not_found` gracefully when cart expires or is canceled.
 
 ### Business
 
@@ -109,7 +109,7 @@ Creates a new cart session with line items and optional buyer/context informatio
 
 ### Get Cart
 
-Retrieves the latest state of a cart session. Returns `NOT_FOUND` if the cart does not exist, has expired, or was canceled.
+Retrieves the latest state of a cart session. Returns `not_found` if the cart does not exist, has expired, or was canceled.
 
 - [REST Binding](https://ucp.dev/draft/specification/cart-rest/#get-cart)
 - [MCP Binding](https://ucp.dev/draft/specification/cart-mcp/#get_cart)
@@ -123,7 +123,7 @@ Performs a full replacement of the cart session. The platform **MUST** send the 
 
 ### Cancel Cart
 
-Cancels a cart session. Business MUST return the cart state before deletion. Subsequent operations for this cart ID SHOULD return `NOT_FOUND`.
+Cancels a cart session. Business MUST return the cart state before deletion. Subsequent operations for this cart ID SHOULD return `not_found`.
 
 - [REST Binding](https://ucp.dev/draft/specification/cart-rest/#cancel-cart)
 - [MCP Binding](https://ucp.dev/draft/specification/cart-mcp/#cancel_cart)
@@ -136,11 +136,19 @@ Cart reuses the same entity schemas as [Checkout](https://ucp.dev/draft/specific
 
 #### Line Item Create Request
 
-**Error:** Schema 'types/line_item.create' not found in any schema directory.
+| Name     | Type                                        | Required | Description                           |
+| -------- | ------------------------------------------- | -------- | ------------------------------------- |
+| item     | [Item](/draft/specification/checkout/#item) | **Yes**  |                                       |
+| quantity | integer                                     | **Yes**  | Quantity of the item being purchased. |
 
 #### Line Item Update Request
 
-**Error:** Schema 'types/line_item.update' not found in any schema directory.
+| Name      | Type                                        | Required | Description                                            |
+| --------- | ------------------------------------------- | -------- | ------------------------------------------------------ |
+| id        | string                                      | No       |                                                        |
+| item      | [Item](/draft/specification/checkout/#item) | **Yes**  |                                                        |
+| quantity  | integer                                     | **Yes**  | Quantity of the item being purchased.                  |
+| parent_id | string                                      | No       | Parent line item identifier for any nested structures. |
 
 #### Line Item Response
 
@@ -186,14 +194,14 @@ This object MUST be one of the following types: [Message Error](/draft/specifica
 
 #### Message Error
 
-| Name         | Type   | Required | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| ------------ | ------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| type         | string | **Yes**  | **Constant = error**. Message type discriminator.                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| code         | string | **Yes**  | Error code. Possible values include: missing, invalid, out_of_stock, payment_declined, requires_sign_in, requires_3ds, requires_identity_linking. Freeform codes also allowed.                                                                                                                                                                                                                                                                                                                                 |
-| path         | string | No       | RFC 9535 JSONPath to the component the message refers to (e.g., $.items[1]).                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| content_type | string | No       | Content format, default = plain. **Enum:** `plain`, `markdown`                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| content      | string | **Yes**  | Human-readable message.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| severity     | string | **Yes**  | Declares who resolves this error. 'recoverable': agent can fix via API. 'requires_buyer_input': merchant requires information their API doesn't support collecting programmatically (checkout incomplete). 'requires_buyer_review': buyer must authorize before order placement due to policy, regulatory, or entitlement rules (checkout complete). Errors with 'requires\_*' severity contribute to 'status: requires_escalation'.* *Enum:*\* `recoverable`, `requires_buyer_input`, `requires_buyer_review` |
+| Name         | Type                                                    | Required | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------------ | ------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| type         | string                                                  | **Yes**  | **Constant = error**. Message type discriminator.                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| code         | [Error Code](/draft/specification/checkout/#error-code) | **Yes**  | Error code identifying the type of error. Standard errors are defined in specification (see examples), and have standardized semantics; freeform codes are permitted.                                                                                                                                                                                                                                                                                                                                          |
+| path         | string                                                  | No       | RFC 9535 JSONPath to the component the message refers to (e.g., $.items[1]).                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| content_type | string                                                  | No       | Content format, default = plain. **Enum:** `plain`, `markdown`                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| content      | string                                                  | **Yes**  | Human-readable message.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| severity     | string                                                  | **Yes**  | Declares who resolves this error. 'recoverable': agent can fix via API. 'requires_buyer_input': merchant requires information their API doesn't support collecting programmatically (checkout incomplete). 'requires_buyer_review': buyer must authorize before order placement due to policy, regulatory, or entitlement rules (checkout complete). Errors with 'requires\_*' severity contribute to 'status: requires_escalation'.* *Enum:*\* `recoverable`, `requires_buyer_input`, `requires_buyer_review` |
 
 #### Message Info
 

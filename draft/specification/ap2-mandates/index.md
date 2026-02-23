@@ -81,15 +81,14 @@ If a public key cannot be resolved, or if the signature is invalid, the business
 
 ## Cryptographic Requirements
 
-### Signature Algorithm
+This extension uses the cryptographic primitives defined in the [Message Signatures](https://ucp.dev/draft/specification/signatures/index.md) specification:
 
-All signatures **MUST** use one of the following algorithms:
+- **Algorithms:** ES256 (required), ES384, ES512
+- **Canonicalization:** JCS ([RFC 8785](https://datatracker.ietf.org/doc/html/rfc8785))
+- **Key Format:** JWK ([RFC 7517](https://datatracker.ietf.org/doc/html/rfc7517))
+- **Key Discovery:** `signing_keys[]` in `/.well-known/ucp` (see [Key Discovery](https://ucp.dev/draft/specification/overview/#key-discovery))
 
-| Algorithm | Description                                           |
-| --------- | ----------------------------------------------------- |
-| `ES256`   | ECDSA using P-256 curve and SHA-256 (**RECOMMENDED**) |
-| `ES384`   | ECDSA using P-384 curve and SHA-384                   |
-| `ES512`   | ECDSA using P-521 curve and SHA-512                   |
+See [Message Signatures](https://ucp.dev/draft/specification/signatures/index.md) for complete details on algorithms, key format, and key rotation.
 
 ### Business Authorization
 
@@ -159,11 +158,17 @@ The checkout mandate **MUST** contain the full checkout response including the `
 
 ### Canonicalization
 
-For signature computation over JSON payloads, implementations **MUST** use **JSON Canonicalization Scheme (JCS)** as defined in [RFC 8785](https://datatracker.ietf.org/doc/html/rfc8785).
+All JSON payloads **MUST** be canonicalized using **JSON Canonicalization Scheme (JCS)** per [RFC 8785](https://datatracker.ietf.org/doc/html/rfc8785).
 
-JCS produces a deterministic, byte-for-byte identical representation of JSON data, ensuring signatures can be verified regardless of whitespace, key ordering, or Unicode normalization differences.
+**Why JCS for Mandates?** UCP request signatures use `Content-Digest` (raw bytes) without canonicalization — the request is signed and verified immediately over the same HTTP connection. Mandates are different:
 
-**Canonicalization Rule:** When computing the business's signature, exclude the `ap2` field entirely. This ensures future AP2 fields are automatically handled.
+- **Durability** — Mandates are stored as evidence of user consent. They may be retrieved and verified days or months later.
+- **Cross-system transmission** — Mandates pass through multiple systems (platform → business → PSP → card network) that may re-serialize JSON.
+- **Reproducibility** — Any party must reconstruct the exact signed bytes from the logical JSON content, regardless of serialization differences.
+
+JCS ensures that semantically identical JSON produces byte-identical output, making signatures reproducible across implementations and time.
+
+**AP2-Specific Rule:** When computing the business's `merchant_authorization` signature, exclude the `ap2` field entirely. This ensures future AP2 fields are automatically handled.
 
 ## The Mandate Flow
 
@@ -173,7 +178,22 @@ Once the `dev.ucp.shopping.ap2_mandate` capability is negotiated, the session is
 
 The platform initiates the session. The business returns the `Checkout` object with `ap2.merchant_authorization` embedded in the response body.
 
-**Error:** Definition '#/$defs/checkout' not found in 'source/schemas/shopping/ap2_mandate.json'
+| Name         | Type          | Required | Description                                                                                                                                                                                                                                                     |
+| ------------ | ------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ucp          | any           | **Yes**  | UCP metadata for checkout responses.                                                                                                                                                                                                                            |
+| id           | string        | **Yes**  | Unique identifier of the checkout session.                                                                                                                                                                                                                      |
+| line_items   | Array[object] | **Yes**  | List of line items being checked out.                                                                                                                                                                                                                           |
+| buyer        | object        | No       | Representation of the buyer.                                                                                                                                                                                                                                    |
+| status       | string        | **Yes**  | Checkout state indicating the current phase and required action. See Checkout Status lifecycle documentation for state transition details. **Enum:** `incomplete`, `requires_escalation`, `ready_for_complete`, `complete_in_progress`, `completed`, `canceled` |
+| currency     | string        | **Yes**  | ISO 4217 currency code reflecting the merchant's market determination. Derived from address, context, and geo IP—buyers provide signals, merchants determine currency.                                                                                          |
+| totals       | Array[object] | **Yes**  | Different cart totals.                                                                                                                                                                                                                                          |
+| messages     | Array[object] | No       | List of messages with error and info about the checkout session state.                                                                                                                                                                                          |
+| links        | Array[object] | **Yes**  | Links to be displayed by the platform (Privacy Policy, TOS). Mandatory for legal compliance.                                                                                                                                                                    |
+| expires_at   | string        | No       | RFC 3339 expiry timestamp. Default TTL is 6 hours from creation if not sent.                                                                                                                                                                                    |
+| continue_url | string        | No       | URL for checkout handoff and session recovery. MUST be provided when status is requires_escalation. See specification for format and availability requirements.                                                                                                 |
+| payment      | object        | No       | Payment configuration containing handlers.                                                                                                                                                                                                                      |
+| order        | object        | No       | Details about an order created for this checkout session.                                                                                                                                                                                                       |
+| ap2          | any           | No       |                                                                                                                                                                                                                                                                 |
 
 **Example Response:**
 

@@ -17,7 +17,7 @@
         <link rel="prev" href="../../documentation/schema-authoring/">
       
       
-        <link rel="next" href="../versioning/">
+        <link rel="next" href="../../documentation/ucp-and-ap2/">
       
       
         
@@ -431,6 +431,8 @@
   
     
     
+      
+        
       
         
       
@@ -1351,6 +1353,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../signatures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signatures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../versioning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Versioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../documentation/schema-authoring/" class="md-nav__link">
         
   
@@ -1358,7 +1416,7 @@
   <span class="md-ellipsis">
     
   
-    Schema Authoring
+    Authoring
   
 
     
@@ -2310,34 +2368,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../versioning/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Versioning
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -4472,9 +4502,9 @@ within the UCP.</p>
 </tr>
 <tr>
 <td style="text-align: left;">code</td>
-<td style="text-align: left;">string</td>
+<td style="text-align: left;"><a href="/draft/specification/reference/#error-code">Error Code</a></td>
 <td style="text-align: left;"><strong>Yes</strong></td>
-<td style="text-align: left;">Error code. Possible values include: missing, invalid, out_of_stock, payment_declined, requires_sign_in, requires_3ds, requires_identity_linking. Freeform codes also allowed.</td>
+<td style="text-align: left;">Error code identifying the type of error. Standard errors are defined in specification (see examples), and have standardized semantics; freeform codes are permitted.</td>
 </tr>
 <tr>
 <td style="text-align: left;">path</td>
@@ -5865,10 +5895,28 @@ and responses.</p>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>Error:</strong> Failed to resolve ''. Ensure ucp-schema is installed: <code>cargo install ucp-schema</code></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">version</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"><strong>Yes</strong></td>
+<td style="text-align: left;">UCP version in YYYY-MM-DD format.</td>
+</tr>
+<tr>
+<td style="text-align: left;">services</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Service registry keyed by reverse-domain name.</td>
+</tr>
+<tr>
+<td style="text-align: left;">capabilities</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Capability registry keyed by reverse-domain name.</td>
+</tr>
+<tr>
+<td style="text-align: left;">payment_handlers</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Payment handler registry keyed by reverse-domain name.</td>
 </tr>
 <tr>
 <td style="text-align: left;">services</td>
@@ -5903,10 +5951,28 @@ and responses.</p>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>Error:</strong> Failed to resolve ''. Ensure ucp-schema is installed: <code>cargo install ucp-schema</code></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">version</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"><strong>Yes</strong></td>
+<td style="text-align: left;">UCP version in YYYY-MM-DD format.</td>
+</tr>
+<tr>
+<td style="text-align: left;">services</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Service registry keyed by reverse-domain name.</td>
+</tr>
+<tr>
+<td style="text-align: left;">capabilities</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Capability registry keyed by reverse-domain name.</td>
+</tr>
+<tr>
+<td style="text-align: left;">payment_handlers</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Payment handler registry keyed by reverse-domain name.</td>
 </tr>
 <tr>
 <td style="text-align: left;">services</td>
@@ -5941,10 +6007,28 @@ and responses.</p>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>Error:</strong> Failed to resolve ''. Ensure ucp-schema is installed: <code>cargo install ucp-schema</code></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">version</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"><strong>Yes</strong></td>
+<td style="text-align: left;">UCP version in YYYY-MM-DD format.</td>
+</tr>
+<tr>
+<td style="text-align: left;">services</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Service registry keyed by reverse-domain name.</td>
+</tr>
+<tr>
+<td style="text-align: left;">capabilities</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Capability registry keyed by reverse-domain name.</td>
+</tr>
+<tr>
+<td style="text-align: left;">payment_handlers</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Payment handler registry keyed by reverse-domain name.</td>
 </tr>
 <tr>
 <td style="text-align: left;">services</td>
@@ -5979,10 +6063,28 @@ and responses.</p>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>Error:</strong> Failed to resolve ''. Ensure ucp-schema is installed: <code>cargo install ucp-schema</code></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">version</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"><strong>Yes</strong></td>
+<td style="text-align: left;">UCP version in YYYY-MM-DD format.</td>
+</tr>
+<tr>
+<td style="text-align: left;">services</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Service registry keyed by reverse-domain name.</td>
+</tr>
+<tr>
+<td style="text-align: left;">capabilities</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Capability registry keyed by reverse-domain name.</td>
+</tr>
+<tr>
+<td style="text-align: left;">payment_handlers</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Payment handler registry keyed by reverse-domain name.</td>
 </tr>
 <tr>
 <td style="text-align: left;">capabilities</td>
@@ -5998,7 +6100,54 @@ and responses.</p>
 different required fields in each context.</p>
 <h4 id="capability-discovery">Capability (Discovery)<a class="headerlink" href="#capability-discovery" title="Permanent link">&para;</a></h4>
 <p>As seen in discovery profiles.</p>
-<p><strong>Error:</strong> Definition '#/$defs/discovery' not found in 'source/schemas/capability.json'</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Required</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">version</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Entity version in YYYY-MM-DD format.</td>
+</tr>
+<tr>
+<td style="text-align: left;">spec</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"><strong>Yes</strong></td>
+<td style="text-align: left;">URL to human-readable specification document.</td>
+</tr>
+<tr>
+<td style="text-align: left;">schema</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"><strong>Yes</strong></td>
+<td style="text-align: left;">URL to JSON Schema defining this entity's structure and payloads.</td>
+</tr>
+<tr>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Unique identifier for this entity instance. Used to disambiguate when multiple instances exist.</td>
+</tr>
+<tr>
+<td style="text-align: left;">config</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Entity-specific configuration. Structure defined by each entity's schema.</td>
+</tr>
+<tr>
+<td style="text-align: left;">extends</td>
+<td style="text-align: left;">OneOf[]</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Parent capability(s) this extends. Present for extensions, absent for root capabilities. Use array for multi-parent extensions.</td>
+</tr>
+</tbody>
+</table>
 <h4 id="capability-response">Capability (Response)<a class="headerlink" href="#capability-response" title="Permanent link">&para;</a></h4>
 <p>As seen in response messages.</p>
 <table>
@@ -6012,10 +6161,40 @@ different required fields in each context.</p>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>Error:</strong> Failed to resolve ''. Ensure ucp-schema is installed: <code>cargo install ucp-schema</code></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">version</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;"><strong>Yes</strong></td>
+<td style="text-align: left;">Entity version in YYYY-MM-DD format.</td>
+</tr>
+<tr>
+<td style="text-align: left;">spec</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">URL to human-readable specification document.</td>
+</tr>
+<tr>
+<td style="text-align: left;">schema</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">URL to JSON Schema defining this entity's structure and payloads.</td>
+</tr>
+<tr>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Unique identifier for this entity instance. Used to disambiguate when multiple instances exist.</td>
+</tr>
+<tr>
+<td style="text-align: left;">config</td>
+<td style="text-align: left;">object</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Entity-specific configuration. Structure defined by each entity's schema.</td>
+</tr>
+<tr>
+<td style="text-align: left;">extends</td>
+<td style="text-align: left;">OneOf[]</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Parent capability(s) this extends. Present for extensions, absent for root capabilities. Use array for multi-parent extensions.</td>
 </tr>
 </tbody>
 </table>
@@ -6058,7 +6237,7 @@ different required fields in each context.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../documentation/schema-authoring/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Schema Authoring">
+          <a href="../../documentation/schema-authoring/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Authoring">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -6068,20 +6247,20 @@ different required fields in each context.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Schema Authoring
+                Authoring
               </div>
             </div>
           </a>
         
         
           
-          <a href="../versioning/" class="md-footer__link md-footer__link--next" aria-label="Next: Versioning">
+          <a href="../../documentation/ucp-and-ap2/" class="md-footer__link md-footer__link--next" aria-label="Next: UCP and AP2">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Versioning
+                UCP and AP2
               </div>
             </div>
             <div class="md-footer__button md-icon">
